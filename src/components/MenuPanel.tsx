@@ -428,7 +428,7 @@ Be VERY specific and detailed. Explain your reasoning.`,
             value={inputKey}
             onChange={(e) => setInputKey(e.target.value)}
           />
-          <button className="btn btn-primary" onClick={saveApiKey}>
+          <button className="name-origin-btn name-origin-btn-primary" onClick={saveApiKey}>
             Save & Continue
           </button>
         </div>
@@ -438,7 +438,7 @@ Be VERY specific and detailed. Explain your reasoning.`,
 
   return (
     <div
-      className="menu-panel"
+      className="name-origin-menu-panel"
       style={{
         position: 'absolute',
         left: `${position.x}px`,
@@ -446,13 +446,13 @@ Be VERY specific and detailed. Explain your reasoning.`,
         transform: position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
       }}
     >
-      <div className="menu-header">
+      <div className="name-origin-menu-header">
         <h3>Nationality Identifier</h3>
-        <button className="close-btn" onClick={onClose}>
+        <button className="name-origin-close-btn" onClick={onClose}>
           ×
         </button>
       </div>
-      <div className="menu-content">
+      <div className="name-origin-menu-content">
         <div className="name-origin-mode-switch-container">
           <span className="name-origin-mode-label">Fast</span>
           <button
