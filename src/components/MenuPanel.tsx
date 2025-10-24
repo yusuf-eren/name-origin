@@ -13,9 +13,9 @@ declare const chrome: {
     sync: {
       get: (
         keys: string[],
-        callback: (result: Record<string, string>) => void
+        callback: (result: Record<string, string | boolean | undefined>) => void
       ) => void;
-      set: (items: Record<string, string>, callback: () => void) => void;
+      set: (items: Record<string, string | boolean>, callback: () => void) => void;
       remove: (keys: string, callback: () => void) => void;
     };
   };
@@ -28,12 +28,20 @@ const MenuPanel: React.FC<MenuPanelProps> = ({ text, x, y, onClose }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [inputKey, setInputKey] = useState('');
   const [position, setPosition] = useState({ x, y, placement: 'top' });
+  const [isDetailedMode, setIsDetailedMode] = useState(false);
 
   useEffect(() => {
-    chrome.storage.sync.get(['openaiApiKey'], (result) => {
-      if (result.openaiApiKey) {
+    chrome.storage.sync.get(['openaiApiKey', 'detailedMode'], (result) => {
+      const detailed = result.detailedMode === true; // Default to false (fast mode)
+      setIsDetailedMode(detailed);
+      
+      if (result.openaiApiKey && typeof result.openaiApiKey === 'string') {
         setHasApiKey(true);
-        fetchOrigin(result.openaiApiKey, text);
+        if (detailed) {
+          fetchOriginDetailed(result.openaiApiKey, text);
+        } else {
+          fetchOriginFast(result.openaiApiKey, text);
+        }
       }
     });
 
@@ -71,7 +79,29 @@ const MenuPanel: React.FC<MenuPanelProps> = ({ text, x, y, onClose }) => {
     chrome.storage.sync.set({ openaiApiKey: inputKey }, () => {
       setHasApiKey(true);
       setShowSettings(false);
-      fetchOrigin(inputKey, text);
+      if (isDetailedMode) {
+        fetchOriginDetailed(inputKey, text);
+      } else {
+        fetchOriginFast(inputKey, text);
+      }
+    });
+  };
+
+  const toggleMode = (detailed: boolean) => {
+    setIsDetailedMode(detailed);
+    chrome.storage.sync.set({ detailedMode: detailed }, () => {
+      // Mode saved
+    });
+    
+    // Re-fetch with new mode if API key exists
+    chrome.storage.sync.get(['openaiApiKey'], (result) => {
+      if (result.openaiApiKey && typeof result.openaiApiKey === 'string') {
+        if (detailed) {
+          fetchOriginDetailed(result.openaiApiKey, text);
+        } else {
+          fetchOriginFast(result.openaiApiKey, text);
+        }
+      }
     });
   };
 
@@ -83,7 +113,75 @@ const MenuPanel: React.FC<MenuPanelProps> = ({ text, x, y, onClose }) => {
     });
   };
 
-  const fetchOrigin = async (key: string, selectedText: string) => {
+  const fetchOriginFast = async (key: string, selectedText: string) => {
+    setLoading(true);
+    setResponse('');
+
+    try {
+      const res = await fetch('https://api.openai.com/v1/responses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          input: [
+            {
+              role: 'system',
+              content: `You are an expert onomastician specializing in quick nationality identification. Provide ONLY the most likely nationality and confidence level. Be fast and accurate.`,
+            },
+            {
+              role: 'user',
+              content: `Quick nationality analysis for: "${selectedText}"`,
+            },
+          ],
+          model: 'gpt-4.1-mini',
+          text: {
+            format: {
+              type: 'json_schema',
+              name: 'fast_nationality_analysis',
+              schema: {
+                type: 'object',
+                properties: {
+                  primary_nationality: {
+                    type: 'string',
+                    description: 'Most likely nationality',
+                  },
+                  confidence_percentage: {
+                    type: 'number',
+                    description: 'Confidence level (0-100)',
+                  },
+                },
+                required: ['primary_nationality', 'confidence_percentage'],
+                additionalProperties: false,
+              },
+              strict: true,
+            },
+          },
+          temperature: 0.3,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        setResponse(JSON.stringify({ error: data.error.message }));
+      } else if (data.output && data.output[0] && data.output[0].content && data.output[0].content[0]) {
+        const textContent = data.output[0].content[0].text;
+        setResponse(textContent);
+      } else {
+        setResponse(JSON.stringify({ error: 'Unexpected response format' }));
+      }
+    } catch (error) {
+      setResponse(
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchOriginDetailed = async (key: string, selectedText: string) => {
     setLoading(true);
     setResponse('');
 
@@ -143,13 +241,10 @@ Be VERY specific and detailed. Explain your reasoning.`,
             },
           ],
           model: 'gpt-4.1-mini',
-
-          // tools: [{ type: 'web_search' }],
-
           text: {
             format: {
               type: 'json_schema',
-              name: 'nationality_analysis',
+              name: 'detailed_nationality_analysis',
               schema: {
                 type: 'object',
                 properties: {
@@ -358,6 +453,20 @@ Be VERY specific and detailed. Explain your reasoning.`,
         </button>
       </div>
       <div className="menu-content">
+        <div className="mode-switch-container">
+          <span className="mode-label">Fast</span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isDetailedMode}
+            className={`mode-switch ${isDetailedMode ? 'checked' : ''}`}
+            onClick={() => toggleMode(!isDetailedMode)}
+          >
+            <span className="mode-switch-thumb"></span>
+          </button>
+          <span className="mode-label">Detailed</span>
+        </div>
+
         <div className="selected-text-box">
           <span className="selected-label">Selected:</span>
           <span className="selected-value">{text}</span>
@@ -390,19 +499,21 @@ Be VERY specific and detailed. Explain your reasoning.`,
                       <div className="nationality-info">
                         <div className="nationality-label">Most Likely</div>
                         <div className="nationality-name">{parsedResponse.primary_nationality || 'Unknown'}</div>
-                        <div className="nationality-meta">
-                          {parsedResponse.specific_region && (
-                            <span className="meta-item">📍 {parsedResponse.specific_region}</span>
-                          )}
-                          {parsedResponse.ethnic_background && (
-                            <span className="meta-item">👥 {parsedResponse.ethnic_background}</span>
-                          )}
-                        </div>
+                        {isDetailedMode && (
+                          <div className="nationality-meta">
+                            {parsedResponse.specific_region && (
+                              <span className="meta-item">📍 {parsedResponse.specific_region}</span>
+                            )}
+                            {parsedResponse.ethnic_background && (
+                              <span className="meta-item">👥 {parsedResponse.ethnic_background}</span>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className="confidence-large">{parsedResponse.confidence_percentage}%</div>
                     </div>
 
-                    {parsedResponse.alternative_nationalities &&
+                    {isDetailedMode && parsedResponse.alternative_nationalities &&
                       parsedResponse.alternative_nationalities.length > 0 && (
                         <div className="alternatives-section">
                           <div className="alternatives-title">Other Possibilities</div>
@@ -419,7 +530,7 @@ Be VERY specific and detailed. Explain your reasoning.`,
                         </div>
                       )}
 
-                    {parsedResponse.cultural_religious_context &&
+                    {isDetailedMode && parsedResponse.cultural_religious_context &&
                       parsedResponse.cultural_religious_context.length > 0 && (
                         <div className="quick-info">
                           {parsedResponse.cultural_religious_context.slice(0, 3).map(

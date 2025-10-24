@@ -14,3 +14,125 @@
   pointer-events: auto;
 }
 
+.name-origin-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #001b3d;
+  box-shadow: 0 2px 4px rgba(0, 27, 61, 0.2);
+  padding: 0;
+  background: transparent;
+}
+
+.name-origin-quick-btn:hover {
+  box-shadow: 0 3px 8px rgba(0, 149, 255, 0.4);
+  border-color: #0095ff;
+}
+
+.name-origin-quick-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Profile page button - slightly larger for h1 names */
+.name-origin-quick-btn-profile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #001b3d;
+  box-shadow: 0 2px 6px rgba(0, 27, 61, 0.25);
+  padding: 0;
+  background: transparent;
+  vertical-align: middle;
+}
+
+.name-origin-quick-btn-profile:hover {
+  box-shadow: 0 4px 12px rgba(0, 149, 255, 0.5);
+  border-color: #0095ff;
+}
+
+.name-origin-quick-btn-profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* "More Profiles for you" section button */
+.name-origin-quick-btn-suggested {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #001b3d;
+  box-shadow: 0 1px 3px rgba(0, 27, 61, 0.2);
+  padding: 0;
+  background: transparent;
+  vertical-align: middle;
+}
+
+.name-origin-quick-btn-suggested:hover {
+  box-shadow: 0 2px 6px rgba(0, 149, 255, 0.4);
+  border-color: #0095ff;
+}
+
+.name-origin-quick-btn-suggested img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Product Hunt button */
+.name-origin-quick-btn-ph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #001b3d;
+  box-shadow: 0 1px 3px rgba(0, 27, 61, 0.2);
+  padding: 0;
+  background: transparent;
+  vertical-align: middle;
+}
+
+.name-origin-quick-btn-ph:hover {
+  box-shadow: 0 2px 6px rgba(0, 149, 255, 0.4);
+  border-color: #0095ff;
+}
+
+.name-origin-quick-btn-ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+

@@ -51,6 +51,70 @@
   background: #fff;
 }
 
+.mode-switch-container {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.mode-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  user-select: none;
+}
+
+.mode-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: #e0e0e0;
+  border: 1px solid #d0d0d0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  outline: none;
+}
+
+.mode-switch:hover {
+  background: #d0d0d0;
+}
+
+.mode-switch:focus-visible {
+  outline: 2px solid #0095ff;
+  outline-offset: 2px;
+}
+
+.mode-switch.checked {
+  background: linear-gradient(135deg, #143c8b 0%, #0095ff 100%);
+  border-color: #0095ff;
+}
+
+.mode-switch.checked:hover {
+  background: linear-gradient(135deg, #0095ff 0%, #143c8b 100%);
+}
+
+.mode-switch-thumb {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+  transform: translateX(2px);
+  pointer-events: none;
+}
+
+.mode-switch.checked .mode-switch-thumb {
+  transform: translateX(18px);
+}
+
 .selected-text-box {
   margin-bottom: 16px;
   padding: 12px 16px;
