@@ -30,7 +30,7 @@ const SelectionPopup: React.FC<SelectionPopupProps> = ({
   return (
     <>
       <div
-        className="selection-popup"
+        className="name-origin-selection-popup"
         style={{
           position: 'absolute',
           left: `${x}px`,
@@ -39,7 +39,7 @@ const SelectionPopup: React.FC<SelectionPopupProps> = ({
         }}
         onClick={onMenuToggle}
       >
-        <img src={logoUrl} alt="NO" className="popup-icon-img" />
+        <img src={logoUrl} alt="NO" className="name-origin-popup-icon-img" />
       </div>
 
       {showMenu && <MenuPanel text={text} x={x} y={y} onClose={onClose} />}

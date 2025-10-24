@@ -363,7 +363,7 @@ Be VERY specific and detailed. Explain your reasoning.`,
   if (showSettings) {
     return (
       <div
-        className="menu-panel"
+        className="name-origin-menu-panel"
         style={{
           position: 'absolute',
           left: `${position.x}px`,
@@ -371,26 +371,26 @@ Be VERY specific and detailed. Explain your reasoning.`,
           transform: position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
         }}
       >
-        <div className="menu-header">
+        <div className="name-origin-menu-header">
           <h3>API Settings</h3>
-          <button className="close-btn" onClick={() => setShowSettings(false)}>
+          <button className="name-origin-close-btn" onClick={() => setShowSettings(false)}>
             ×
           </button>
         </div>
-        <div className="menu-content">
+        <div className="name-origin-menu-content">
           <input
             type="password"
-            className="api-key-input"
+            className="name-origin-api-key-input"
             placeholder="Enter OpenAI API Key"
             value={inputKey}
             onChange={(e) => setInputKey(e.target.value)}
           />
-          <div className="button-group">
-            <button className="btn btn-primary" onClick={saveApiKey}>
+          <div className="name-origin-button-group">
+            <button className="name-origin-btn name-origin-btn-primary" onClick={saveApiKey}>
               Save
             </button>
             {hasApiKey && (
-              <button className="btn btn-secondary" onClick={deleteApiKey}>
+              <button className="name-origin-btn name-origin-btn-secondary" onClick={deleteApiKey}>
                 Delete Key
               </button>
             )}
@@ -403,7 +403,7 @@ Be VERY specific and detailed. Explain your reasoning.`,
   if (!hasApiKey) {
     return (
       <div
-        className="menu-panel"
+        className="name-origin-menu-panel"
         style={{
           position: 'absolute',
           left: `${position.x}px`,
@@ -411,19 +411,19 @@ Be VERY specific and detailed. Explain your reasoning.`,
           transform: position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
         }}
       >
-        <div className="menu-header">
+        <div className="name-origin-menu-header">
           <h3>API Key Required</h3>
-          <button className="close-btn" onClick={onClose}>
+          <button className="name-origin-close-btn" onClick={onClose}>
             ×
           </button>
         </div>
-        <div className="menu-content">
+        <div className="name-origin-menu-content">
           <p style={{ marginBottom: '12px', color: '#000' }}>
             Please enter your OpenAI API key to continue.
           </p>
           <input
             type="password"
-            className="api-key-input"
+            className="name-origin-api-key-input"
             placeholder="Enter OpenAI API Key"
             value={inputKey}
             onChange={(e) => setInputKey(e.target.value)}
@@ -453,28 +453,28 @@ Be VERY specific and detailed. Explain your reasoning.`,
         </button>
       </div>
       <div className="menu-content">
-        <div className="mode-switch-container">
-          <span className="mode-label">Fast</span>
+        <div className="name-origin-mode-switch-container">
+          <span className="name-origin-mode-label">Fast</span>
           <button
             type="button"
             role="switch"
             aria-checked={isDetailedMode}
-            className={`mode-switch ${isDetailedMode ? 'checked' : ''}`}
+            className={`name-origin-mode-switch ${isDetailedMode ? 'name-origin-checked' : ''}`}
             onClick={() => toggleMode(!isDetailedMode)}
           >
-            <span className="mode-switch-thumb"></span>
+            <span className="name-origin-mode-switch-thumb"></span>
           </button>
-          <span className="mode-label">Detailed</span>
+          <span className="name-origin-mode-label">Detailed</span>
         </div>
 
-        <div className="selected-text-box">
-          <span className="selected-label">Selected:</span>
-          <span className="selected-value">{text}</span>
+        <div className="name-origin-selected-text-box">
+          <span className="name-origin-selected-label">Selected:</span>
+          <span className="name-origin-selected-value">{text}</span>
         </div>
 
         {loading && (
-          <div className="loader">
-            <div className="spinner"></div>
+          <div className="name-origin-loader">
+            <div className="name-origin-spinner"></div>
           </div>
         )}
 
@@ -486,43 +486,43 @@ Be VERY specific and detailed. Explain your reasoning.`,
 
                 if (parsedResponse.error) {
                   return (
-                    <div className="error-message">
+                    <div className="name-origin-error-message">
                       Error: {parsedResponse.error}
                     </div>
                   );
                 }
 
                 return (
-                  <div className="nationality-result">
-                    <div className="primary-nationality-card">
-                      <div className="nationality-flag">🌍</div>
-                      <div className="nationality-info">
-                        <div className="nationality-label">Most Likely</div>
-                        <div className="nationality-name">{parsedResponse.primary_nationality || 'Unknown'}</div>
+                  <div className="name-origin-nationality-result">
+                    <div className="name-origin-primary-nationality-card">
+                      <div className="name-origin-nationality-flag">🌍</div>
+                      <div className="name-origin-nationality-info">
+                        <div className="name-origin-nationality-label">Most Likely</div>
+                        <div className="name-origin-nationality-name">{parsedResponse.primary_nationality || 'Unknown'}</div>
                         {isDetailedMode && (
-                          <div className="nationality-meta">
+                          <div className="name-origin-nationality-meta">
                             {parsedResponse.specific_region && (
-                              <span className="meta-item">📍 {parsedResponse.specific_region}</span>
+                              <span className="name-origin-meta-item">📍 {parsedResponse.specific_region}</span>
                             )}
                             {parsedResponse.ethnic_background && (
-                              <span className="meta-item">👥 {parsedResponse.ethnic_background}</span>
+                              <span className="name-origin-meta-item">👥 {parsedResponse.ethnic_background}</span>
                             )}
                           </div>
                         )}
                       </div>
-                      <div className="confidence-large">{parsedResponse.confidence_percentage}%</div>
+                      <div className="name-origin-confidence-large">{parsedResponse.confidence_percentage}%</div>
                     </div>
 
                     {isDetailedMode && parsedResponse.alternative_nationalities &&
                       parsedResponse.alternative_nationalities.length > 0 && (
-                        <div className="alternatives-section">
-                          <div className="alternatives-title">Other Possibilities</div>
-                          <div className="alternatives-grid">
+                        <div className="name-origin-alternatives-section">
+                          <div className="name-origin-alternatives-title">Other Possibilities</div>
+                          <div className="name-origin-alternatives-grid">
                             {parsedResponse.alternative_nationalities.slice(0, 3).map(
                               (alt: { nationality: string; confidence: number; reason: string }, idx: number) => (
-                                <div key={idx} className="alternative-card">
-                                  <div className="alt-nationality">{alt.nationality}</div>
-                                  <div className="alt-confidence">{alt.confidence}%</div>
+                                <div key={idx} className="name-origin-alternative-card">
+                                  <div className="name-origin-alt-nationality">{alt.nationality}</div>
+                                  <div className="name-origin-alt-confidence">{alt.confidence}%</div>
                                 </div>
                               )
                             )}
@@ -532,10 +532,10 @@ Be VERY specific and detailed. Explain your reasoning.`,
 
                     {isDetailedMode && parsedResponse.cultural_religious_context &&
                       parsedResponse.cultural_religious_context.length > 0 && (
-                        <div className="quick-info">
+                        <div className="name-origin-quick-info">
                           {parsedResponse.cultural_religious_context.slice(0, 3).map(
                             (context: string, idx: number) => (
-                              <span key={idx} className="info-tag">
+                              <span key={idx} className="name-origin-info-tag">
                                 {context}
                               </span>
                             )
@@ -545,15 +545,15 @@ Be VERY specific and detailed. Explain your reasoning.`,
                   </div>
                 );
               } catch (e) {
-                return <div className="response-text">{response}</div>;
+                return <div className="name-origin-response-text">{response}</div>;
               }
             })()}
           </>
         )}
 
-        <div className="settings-link">
+        <div className="name-origin-settings-link">
           <button
-            className="settings-btn"
+            className="name-origin-settings-btn"
             onClick={() => setShowSettings(true)}
           >
             Update API Key
