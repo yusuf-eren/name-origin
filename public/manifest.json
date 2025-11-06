@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "description": "Identify nationality and ethnicity by analyzing names and surnames with detailed cultural insights",
   "permissions": [
-    "activeTab",
     "storage"
   ],
   "content_scripts": [
